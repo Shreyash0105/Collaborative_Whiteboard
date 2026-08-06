@@ -52,53 +52,88 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="p-6 font-sans max-w-6xl mx-auto">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">My Dashboard</h1>
-        <button onClick={handleLogout} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700">Logout</button>
-      </div>
+    <div className="min-h-screen bg-slate-50 font-sans flex flex-col">
+      {/* 
+        TOP COLORED SECTION (30-40% of viewport) 
+        Uses #300A6E and #0B00CF from the palette
+      */}
+      <div className="relative min-h-[35vh] flex flex-col justify-center bg-gradient-to-br from-[#300A6E] to-[#0B00CF] px-6 py-12 shadow-lg overflow-hidden">
+        
+        {/* Elegant "DASHBOARD" Background Watermark */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none opacity-5">
+          <h1 className="text-7xl md:text-[180px] font-serif font-black text-white tracking-widest uppercase whitespace-nowrap">
+            Dashboard
+          </h1>
+        </div>
 
-      <form onSubmit={handleCreate} className="mb-8 flex items-center">
-        <input 
-          value={title} 
-          onChange={(e) => setTitle(e.target.value)} 
-          placeholder="Session title..." 
-          className="p-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
-        />
-        <button 
-          type="submit" 
-          className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-r-md hover:bg-blue-600 transition-colors"
-        >
-          Create New Session
-        </button>
-      </form>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {sessions.map(session => (
-          <div 
-            key={session._id} 
-            onClick={() => navigate(`/board/${session._id}`)}
-            className="border border-gray-200 bg-white p-5 cursor-pointer rounded-lg shadow-sm hover:shadow-md hover:border-blue-300 transition-all"
-          >
-            <h3 className="text-xl font-semibold text-gray-800 mb-2 truncate">
-              {session.title}
-            </h3>
-            <p className="text-sm text-gray-500">
-              Last Edit: {new Date(session.lastModified).toLocaleDateString()}
-            </p>
-
+        {/* Header Controls */}
+        <div className="relative z-10 w-full max-w-6xl mx-auto">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold text-white drop-shadow-md">My Workspace</h2>
+            {/* Uses #C10A28 from the palette */}
             <button 
-              onClick={(e) => { 
-                e.stopPropagation(); // Prevents the div onClick from firing
-                setShareConfig({ isOpen: true, sessionId: session._id }); 
-              }}
-              className="mt-auto px-3 py-1 bg-blue-100 text-blue-700 text-sm font-semibold rounded hover:bg-blue-200"
+              onClick={handleLogout} 
+              className="px-5 py-2 bg-[#C10A28] text-white font-medium rounded-md hover:bg-opacity-80 transition-all shadow-md"
             >
-              Share Session
+              Logout
             </button>
           </div>
-        ))}
+
+          {/* Creation Form */}
+          <form onSubmit={handleCreate} className="flex flex-col sm:flex-row items-center w-full max-w-2xl bg-white p-2 rounded-lg shadow-2xl">
+            <input 
+              value={title} 
+              onChange={(e) => setTitle(e.target.value)} 
+              placeholder="Enter session title..." 
+              className="flex-1 p-3 text-gray-800 rounded-md focus:outline-none bg-transparent"
+            />
+            {/* Uses #FF2D2B from the palette */}
+            <button 
+              type="submit" 
+              className="w-full sm:w-auto mt-2 sm:mt-0 px-6 py-3 bg-[#FF2D2B] text-white font-semibold rounded-md hover:bg-opacity-90 transition-transform active:scale-95"
+            >
+              Create New Session
+            </button>
+          </form>
+        </div>
       </div>
+
+      {/* BOTTOM SECTION (Sessions Grid) */}
+      <div className="flex-1 w-full max-w-7xl mx-auto px-6 py-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          {sessions.map(session => (
+            <div 
+              key={session._id} 
+              onClick={() => navigate(`/board/${session._id}`)}
+              className="group flex flex-col border border-gray-200 bg-white p-6 cursor-pointer rounded-xl shadow-sm hover:shadow-xl hover:border-[#0B00CF] transition-all duration-300 min-h-[160px]"
+            >
+              <h3 className="text-xl font-bold text-gray-800 mb-2 truncate group-hover:text-[#0B00CF] transition-colors">
+                {session.title}
+              </h3>
+              <p className="text-sm text-gray-400 mb-4">
+                Last Edit: {new Date(session.lastModified).toLocaleDateString()}
+              </p>
+
+              <button 
+                onClick={(e) => { 
+                  e.stopPropagation(); 
+                  setShareConfig({ isOpen: true, sessionId: session._id }); 
+                }}
+                className="mt-auto px-4 py-2 bg-[#0B00CF]/10 text-[#0B00CF] text-sm font-bold rounded-md hover:bg-[#0B00CF] hover:text-white transition-colors w-full"
+              >
+                Share Session
+              </button>
+            </div>
+          ))}
+        </div>
+
+        {sessions.length === 0 && (
+          <div className="text-center text-gray-400 mt-12 text-lg">
+            No sessions available. Create one to get started!
+          </div>
+        )}
+      </div>
+
       {/* Render the reusable modal */}
       <ShareModal 
         isOpen={shareConfig.isOpen} 
