@@ -121,13 +121,6 @@ Add your project images below before publishing to GitHub.
 | ![](./docs/images/whiteboard.png) | Whiteboard canvas |
 | ![](./docs/images/share-modal.png) | Share session modal |
 
-You can replace the links above with your actual screenshots or embed images directly like this:
-
-```md
-![Dashboard](./docs/images/dashboard.png)
-![Whiteboard](./docs/images/whiteboard.png)
-![Share modal](./docs/images/share-modal.png)
-```
 
 ## Deployment Notes
 
