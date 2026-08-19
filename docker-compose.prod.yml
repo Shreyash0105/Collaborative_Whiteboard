@@ -1,0 +1,21 @@
+# docker-compose.prod.yml
+version: '3.8'
+
+services:
+  backend:
+    image: ${{DOCKER_USERNAME}}/whiteboard-backend:latest
+    container_name: whiteboard-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+
+  frontend:
+    image: ${{DOCKER_USERNAME}}/whiteboard-frontend:latest
+    container_name: whiteboard-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
